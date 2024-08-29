@@ -9,6 +9,9 @@
 <html>
 <head>
     <title>Lista de Usuário</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="css/ListaUsuario.css">
 </head>
 <body>
 
@@ -21,9 +24,9 @@
     </div>
 </nav>
 
-<table class="table-primary">
+<table class="table">
     <thead>
-    <tr>
+    <tr class="table-primary">
         <th scope="col">Nome</th>
         <th scope="col">Email</th>
         <th scope="col">Status</th>
