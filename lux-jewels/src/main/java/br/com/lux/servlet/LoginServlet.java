@@ -15,21 +15,25 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("login.jsp").forward(request, response);
     };
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String senha = request.getParameter("senha");
 
-        if (email == null || password == null) {
+        UserDao userDao = new UserDao();
+
+        if (email == null || senha == null) {
             request.getSession().setAttribute("message", "Email or password is missing");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        User user = new User(null, email, password); // O nome de usuário pode ser nulo aqui, já que não é usado
+        User user = new User(); // O nome de usuário pode ser nulo aqui, já que não é usado
 
         boolean isValidUser = new UserDao().verifyCredentials(user);
 

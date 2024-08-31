@@ -30,6 +30,7 @@
         <th scope="col">Nome</th>
         <th scope="col">Email</th>
         <th scope="col">Status</th>
+        <th scope="col">Grupo</th>
         <th scope="col">Alterar</th>
         <th scope="col">Hab/Des</th>
     </tr>
@@ -39,6 +40,7 @@
         <td>Thiago</td>
         <td>thi@gmail.com</td>
         <td>Ativo</td>
+        <td>Administrador</td>
         <td>Alterar</td>
         <td>Inabilitar</td>
     </tr>
