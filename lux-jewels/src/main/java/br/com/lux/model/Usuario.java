@@ -3,35 +3,37 @@ package br.com.lux.model;
 // LEMBRANDO, CLIENTE NÃO DEVE HERDAR USER
 
 
-public class User   {
+public class Usuario {
 
     private int idUsuario;
-    private String username;
+    private String nome;
     private String email;
     private String senha;
-    private String status;
+    private String cpf;
+    private boolean status;
     private String grupo;
 
 
-    public User() {
+    public Usuario() {
         super();
     }
 
-    public User(int idUsuario, String username, String senha, String email, String grupo, String status) {
+    public Usuario(int idUsuario, String username, String senha, String email, String cpf, String grupo, boolean status) {
         this.idUsuario = idUsuario;
-        this.username = username;
+        this.nome = username;
         this.senha = senha;
+        this.cpf = cpf;
         this.email = email;
         this.grupo = grupo;
         this.status = status;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNome() {
+        return nome;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getSenha() {
@@ -50,6 +52,15 @@ public class User   {
         this.email = email;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+
     public String getGrupo() {
         return grupo;
     }
@@ -58,11 +69,11 @@ public class User   {
         this.grupo = grupo;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
