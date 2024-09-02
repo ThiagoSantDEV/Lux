@@ -7,25 +7,11 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="br.com.lux.dao.CreateUsuarioDao" %>
-<%@ page import="br.com.lux.model.Usuario" %>
-
-<%
-    // Captura o ID do usuário da URL, se disponível
-    String id = request.getParameter("id");
-    Usuario usuario = null;
-
-    if (id != null && !id.isEmpty()) {
-        CreateUsuarioDao userDao = new CreateUsuarioDao();
-        usuario = userDao.buscarUsuarioPorId(Integer.parseInt(id));
-    }
-%>
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>${usuario == null ? "Cadastro de Usuário" : "Alteração de Usuário"}</title>
+    <title>Cadastro de Usuário</title>
     <script>
         function validateForm() {
             const senha1 = document.getElementById("senha").value;
@@ -76,35 +62,30 @@
     <link rel="stylesheet" type="text/css" href="css/CadastrarUsuario.css">
 </head>
 <body>
-<h2>${usuario == null ? "Cadastro de Usuário" : "Alteração de Usuário"}</h2>
+<h2>Cadastro de Usuário</h2>
 <form action="CadastroUsuarioServlet" method="post" onsubmit="return validateForm();">
-
-    <c:if test="${usuario != null}">
-        <input type="hidden" name="id" value="${usuario.id}">
-    </c:if>
-
     <label for="nome">Nome:</label><br>
-    <input type="text" id="nome" name="nome" value="${usuario != null ? usuario.getNome() : ''}" required><br><br>
+    <input type="text" id="nome" name="nome" required><br><br>
 
     <label for="cpf">CPF:</label><br>
-    <input type="text" id="cpf" name="cpf" value="${usuario != null ? usuario.getCpf() : ''}" required><br><br>
+    <input type="text" id="cpf" name="cpf" required><br><br>
 
     <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" value="${usuario != null ? usuario.getEmail() : ''}" ${usuario != null ? 'readonly' : ''} required><br><br>
+    <input type="email" id="email" name="email" required><br><br>
 
     <label for="senha">Senha:</label><br>
-    <input type="password" id="senha" name="senha" ${usuario == null ? "required" : ""}><br><br>
+    <input type="password" id="senha" name="senha" required><br><br>
 
     <label for="confirmaSenha">Confirme a Senha:</label><br>
-    <input type="password" id="confirmaSenha" name="confirmaSenha" ${usuario == null ? "required" : ""}><br><br>
+    <input type="password" id="confirmaSenha" name="confirmaSenha" required><br><br>
 
     <label for="grupo">Grupo:</label><br>
     <select id="grupo" name="grupo" required>
-        <option value="admin" ${usuario != null && "admin".equals(usuario.getGrupo()) ? "selected" : ""}>Admin</option>
-        <option value="estoquista" ${usuario != null && "estoquista".equals(usuario.getGrupo()) ? "selected" : ""}>Estoquista</option>
+        <option value="admin">Admin</option>
+        <option value="estoquista">Estoquista</option>
     </select><br><br>
 
-    <input type="submit" value="${usuario == null ? "Cadastrar" : "Salvar Alterações"}">
+    <input type="submit" value="Cadastrar">
 </form>
 
 <c:if test="${not empty mensagem}">
