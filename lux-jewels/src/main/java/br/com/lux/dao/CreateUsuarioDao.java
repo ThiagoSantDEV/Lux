@@ -80,4 +80,30 @@ public class CreateUsuarioDao {
         }
         return false;
     }
+
+    public Usuario updateUsuario (Usuario usuario) {
+
+        String SQL = "UPDATE usuarios SET nome = ?, email = ?, senha = ?, cpf = ?, status = ?, grupo = ? WHERE idUsuario = ?";
+
+        try (Connection connection = ConnectionPoolConfig.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, usuario.getNome());
+            stmt.setString(2, usuario.getEmail());
+            stmt.setString(3, usuario.getSenha());
+            stmt.setString(4, usuario.getCpf());
+            stmt.setBoolean(5, usuario.getStatus());
+            stmt.setString(6, usuario.getGrupo());
+            stmt.setInt(7, usuario.getIdUsuario());
+
+            System.out.println("Usuário alterado com sucesso!");
+
+        } catch (SQLException e) {
+
+            System.out.println("Erro ao alterar o usuário: " + e.getMessage());
+
+        }
+        return usuario;
+    }
+
 }

@@ -17,6 +17,7 @@ public class CadastroUsuarioServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String idUsuario = request.getParameter("id");
         String nome = request.getParameter("nome");
         String cpf = request.getParameter("cpf").replaceAll("[^\\d]", "");
         String email = request.getParameter("email");
@@ -49,9 +50,15 @@ public class CadastroUsuarioServlet extends HttpServlet {
             usuario.setGrupo(grupo);
             usuario.setStatus(true);
 
-            userDao.criarUsuario(usuario);
+            if (idUsuario == null || idUsuario.isBlank()) {
+                userDao.criarUsuario(usuario);
+                response.sendRedirect("login.jsp");
+            } else {
+                usuario.setIdUsuario(Integer.parseInt(idUsuario));
+                userDao.updateUsuario(usuario);
+                response.sendRedirect("listarUsuario.jsp");
+            }
 
-            response.sendRedirect("login.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("mensagem", "Ocorreu um erro ao cadastrar o usuário.");

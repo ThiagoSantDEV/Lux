@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
                 request.getSession().setAttribute("loggedUser", email);
                 response.sendRedirect("links.jsp");
             } else {
-                request.getSession().setAttribute("message", "O email ou a senha não correspondem");
+                request.getSession().setAttribute("message", "E-mail e/ou senha incorretos. Por favor, tente novamente.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
         } catch (Exception e) {
