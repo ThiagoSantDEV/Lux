@@ -27,7 +27,7 @@ public class CadastroUsuarioServlet extends HttpServlet {
 
         if (!senha.equals(confirmaSenha)) {
             request.setAttribute("mensagem", "As senhas não coincidem!");
-            request.getRequestDispatcher("cadastroUsuario.jsp").forward(request, response);
+            request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
             return;
         }
 
@@ -36,7 +36,12 @@ public class CadastroUsuarioServlet extends HttpServlet {
 
             if (userDao.buscarUsuarioPorEmail(email) != null) {
                 request.setAttribute("mensagem", "O email já está cadastrado!");
-                request.getRequestDispatcher("cadastroUsuario.jsp").forward(request, response);
+                request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
+                return;
+            }
+            if (userDao.buscarUsuarioPorCPF(cpf) != null) {
+                request.setAttribute("mensagem", "Esse CPF já está cadastrado!");
+                request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
                 return;
             }
 
@@ -62,7 +67,7 @@ public class CadastroUsuarioServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("mensagem", "Ocorreu um erro ao cadastrar o usuário.");
-            request.getRequestDispatcher("cadastroUsuario.jsp").forward(request, response);
+            request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
         }
     }
 }

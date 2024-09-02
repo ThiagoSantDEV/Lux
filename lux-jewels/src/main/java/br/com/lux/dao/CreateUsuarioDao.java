@@ -48,6 +48,7 @@ public class CreateUsuarioDao {
                     Usuario usuario = new Usuario();
                     usuario.setIdUsuario(rs.getInt("id"));
                     usuario.setNome(rs.getString("nome"));
+                    usuario.setCpf(rs.getString("cpf"));
                     usuario.setEmail(rs.getString("email"));
                     usuario.setSenha(rs.getString("senha"));
                     usuario.setGrupo(rs.getString("grupo"));
@@ -57,6 +58,31 @@ public class CreateUsuarioDao {
             }
         } catch (SQLException e) {
             System.out.println("Erro ao buscar usuário por email: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public Usuario buscarUsuarioPorCPF(String cpf) {
+        String SQL = "SELECT * FROM usuarios WHERE cpf = ?";
+        try (Connection connection = ConnectionPoolConfig.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQL)) {
+
+            stmt.setString(1, cpf);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("id"));
+                    usuario.setNome(rs.getString("nome"));
+                    usuario.setCpf(rs.getString("cpf"));
+                    usuario.setEmail(rs.getString("email"));
+                    usuario.setSenha(rs.getString("senha"));
+                    usuario.setGrupo(rs.getString("grupo"));
+                    usuario.setStatus(rs.getBoolean("ativo"));
+                    return usuario;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar usuário por cpf: " + e.getMessage());
         }
         return null;
     }
