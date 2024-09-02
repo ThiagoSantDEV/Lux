@@ -5,6 +5,8 @@ import br.com.lux.model.Usuario;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateUsuarioDao {
 
@@ -81,6 +83,31 @@ public class CreateUsuarioDao {
         return false;
     }
 
+    public Usuario buscarUsuarioPorId(int id) {
+        String SQL = "SELECT * FROM usuarios WHERE id = ?";
+        try (Connection connection = ConnectionPoolConfig.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQL)) {
+
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("id"));
+                    usuario.setNome(rs.getString("nome"));
+                    usuario.setCpf(rs.getString("cpf"));
+                    usuario.setEmail(rs.getString("email"));
+                    usuario.setSenha(rs.getString("senha"));
+                    usuario.setGrupo(rs.getString("grupo"));
+                    usuario.setStatus(rs.getBoolean("ativo"));
+                    return usuario;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar usuário por ID: " + e.getMessage());
+        }
+        return null;
+    }
+
     public Usuario updateUsuario (Usuario usuario) {
 
         String SQL = "UPDATE usuarios SET nome = ?, email = ?, senha = ?, cpf = ?, status = ?, grupo = ? WHERE idUsuario = ?";
@@ -105,5 +132,30 @@ public class CreateUsuarioDao {
         }
         return usuario;
     }
+
+    public List<Usuario> listarUsuarios() {
+
+        String SQL = "SELECT * FROM usuarios";
+        List<Usuario> usuarios = new ArrayList<>();
+
+        try (Connection connection = ConnectionPoolConfig.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQL);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setIdUsuario(rs.getInt("id"));
+                usuario.setNome(rs.getString("nome"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setStatus(rs.getBoolean("ativo"));
+                usuario.setGrupo(rs.getString("grupo"));
+                usuarios.add(usuario);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar usuários: " + e.getMessage());
+        }
+        return usuarios;
+    }
+
 
 }

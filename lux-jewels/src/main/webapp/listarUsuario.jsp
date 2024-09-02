@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
     <title>Lista de Usuário</title>
@@ -36,14 +38,25 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>Thiago</td>
-        <td>thi@gmail.com</td>
-        <td>Ativo</td>
-        <td>Administrador</td>
-        <td>Alterar</td>
-        <td>Inabilitar</td>
-    </tr>
+        <c:forEach var="usuario" items="${usuarios}">
+            <tr>
+                <td>${usuario.nome}</td>
+                <td>${usuario.email}</td>
+                <td>${usuario.status ? 'Ativo' : 'Inativo'}</td>
+                <td>${usuario.grupo}</td>
+                <td>
+                    <a href="cadastrarUsuario.jsp?id=${usuario.idUsuario}" class="btn btn-primary">Alterar</a>
+                </td>
+                <td>
+                    <form action="AlterarStatusServlet" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="${usuario.idUsuario}">
+                        <button type="submit" class="btn ${usuario.status ? 'btn-danger' : 'btn-success'}">
+                            ${usuario.status ? 'Desabilitar' : 'Habilitar'}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </c:forEach>
     </tbody>
 </table>
 </body>
