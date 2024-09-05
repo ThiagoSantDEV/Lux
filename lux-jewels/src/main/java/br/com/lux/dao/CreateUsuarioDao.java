@@ -6,6 +6,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CreateUsuarioDao {
@@ -48,7 +49,7 @@ public class CreateUsuarioDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("id"));
+                    usuario.setIdUsuario(rs.getInt("idUsuario")); // Corrigido para idUsuario
                     usuario.setNome(rs.getString("nome"));
                     usuario.setCpf(rs.getString("cpf"));
                     usuario.setEmail(rs.getString("email"));
@@ -73,7 +74,7 @@ public class CreateUsuarioDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("id"));
+                    usuario.setIdUsuario(rs.getInt("idUsuario")); // Corrigido para idUsuario
                     usuario.setNome(rs.getString("nome"));
                     usuario.setCpf(rs.getString("cpf"));
                     usuario.setEmail(rs.getString("email"));
@@ -108,13 +109,41 @@ public class CreateUsuarioDao {
         }
         return false;
     }
-
-    public Usuario updateUsuario (Usuario usuario) {
-
-        String SQL = "UPDATE usuarios SET nome = ?, email = ?, senha = ?, cpf = ?, status = ?, grupo = ? WHERE idUsuario = ?";
-
+    public List<Usuario> listarUsuarios() {
+        String SQL = "SELECT * FROM usuarios";
+        List<Usuario> usuarios = new ArrayList<>();
         try (Connection connection = ConnectionPoolConfig.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = connection.prepareStatement(SQL);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Usuario user = new Usuario();
+                user.setIdUsuario(rs.getInt("id"));
+                user.setNome(rs.getString("nome"));
+                user.setEmail(rs.getString("email"));
+                user.setSenha(rs.getString("senha"));
+                user.setCpf(rs.getString("cpf"));
+                user.setStatus(rs.getBoolean("ativo"));
+                user.setGrupo(rs.getString("grupo"));
+                usuarios.add(user);
+
+            }
+
+            System.out.println("Usuarios listados: "+ listarUsuarios() );
+
+        } catch (Exception e) {
+            System.out.println("fail in database connection");
+            return Collections.emptyList();
+        }
+        return usuarios;
+    }
+
+
+
+
+    public Usuario updateUsuario(Usuario usuario) {
+        String SQL = "UPDATE usuarios SET nome = ?, email = ?, senha = ?, cpf = ?, ativo = ?, grupo = ? WHERE idUsuario = ?";
+        try (Connection connection = ConnectionPoolConfig.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQL)) {
 
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getEmail());
@@ -124,12 +153,14 @@ public class CreateUsuarioDao {
             stmt.setString(6, usuario.getGrupo());
             stmt.setInt(7, usuario.getIdUsuario());
 
-            System.out.println("Usuário alterado com sucesso!");
-
+            int linhasAfetadas = stmt.executeUpdate();
+            if (linhasAfetadas > 0) {
+                System.out.println("Usuário alterado com sucesso!");
+            } else {
+                System.out.println("Nenhum usuário encontrado para atualizar.");
+            }
         } catch (SQLException e) {
-
             System.out.println("Erro ao alterar o usuário: " + e.getMessage());
-
         }
         return usuario;
     }
@@ -143,7 +174,7 @@ public class CreateUsuarioDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("idUsuario"));
+                    usuario.setIdUsuario(rs.getInt("idUsuario")); // Correto
                     usuario.setNome(rs.getString("nome"));
                     usuario.setCpf(rs.getString("cpf"));
                     usuario.setEmail(rs.getString("email"));
@@ -159,7 +190,7 @@ public class CreateUsuarioDao {
         return null;
     }
 
-    public List<Usuario> BuscarUsuarioPorNome(String nome) {
+    public List<Usuario> buscarUsuarioPorNome(String nome) {
         List<Usuario> users = new ArrayList<>();
         String SQL = "SELECT * FROM usuarios WHERE nome LIKE ?";
         try (Connection connection = ConnectionPoolConfig.getConnection();
@@ -169,7 +200,7 @@ public class CreateUsuarioDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Usuario user = new Usuario();
-                    user.setIdUsuario(rs.getInt("idUsuario"));
+                    user.setIdUsuario(rs.getInt("idUsuario")); // Corrigido para idUsuario
                     user.setNome(rs.getString("nome"));
                     user.setEmail(rs.getString("email"));
                     user.setSenha(rs.getString("senha"));
@@ -185,33 +216,7 @@ public class CreateUsuarioDao {
         return users;
     }
 
-    public ArrayList<Usuario> listarUsuarios() {
-        ArrayList<Usuario> usuarios = new ArrayList<>();
-        String read = "SELECT * FROM Usuario";
-        try {
-            Connection connection = ConnectionPoolConfig.getConnection();
-            PreparedStatement ps = connection.prepareStatement(read);
-            ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                Usuario usuario = new Usuario();
-                int idUsuario = (rs.getInt(1));
-                String nome = (rs.getString(2));
-                String email = (rs.getString(4));
-                String senha = (rs.getString(3));
-                String cpf = (rs.getString(7));
-                Boolean status = (rs.getBoolean(6));
-                String grupo = (rs.getString(5));
 
-                usuarios.add(new Usuario(idUsuario, nome, senha, email, cpf, grupo, status));
-            }
-            connection.close();
-            return usuarios;
 
-        } catch (SQLException e) {
-            System.out.println("Erro ao listar usuários: " + e.getMessage());
-            return null;
-        }
-
-    }
 }

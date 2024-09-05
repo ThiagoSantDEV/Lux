@@ -61,7 +61,7 @@ public class CadastroUsuarioServlet extends HttpServlet {
             } else {
                 usuario.setIdUsuario(Integer.parseInt(idUsuario));
                 userDao.updateUsuario(usuario);
-                response.sendRedirect("listarUsuario.jsp");
+                response.sendRedirect("/lista-usuario");
             }
 
         } catch (Exception e) {

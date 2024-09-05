@@ -24,15 +24,5 @@
         <url-pattern>/console/*</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>LinksServlet</servlet-name>
-        <servlet-class>br.com.lux.servlet.LinksServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>LinksServlet</servlet-name>
-        <url-pattern>/links</url-pattern>
-    </servlet-mapping>
-
 
 </web-app>

@@ -9,20 +9,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
-
-@WebServlet("/lista-usuario ")
+@WebServlet("/lista-usuario")
 public class ListarUsuarioServlet extends HttpServlet {
-    private CreateUsuarioDao usuarioDao = new CreateUsuarioDao();
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    protected void usuarios(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        ArrayList<Usuario> lista = usuarioDao.listarUsuarios();
+        CreateUsuarioDao usuarioDao = new CreateUsuarioDao();
+        List<Usuario> listaUsuarios = usuarioDao.listarUsuarios();
+        request.setAttribute("users", listaUsuarios);
+        request.getRequestDispatcher("/listarUsuario.jsp").forward(request, response);
     }
 }
+
+

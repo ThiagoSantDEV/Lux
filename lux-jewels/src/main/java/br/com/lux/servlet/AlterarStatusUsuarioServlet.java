@@ -1,3 +1,4 @@
+
 package br.com.lux.servlet;
 
 import br.com.lux.dao.CreateUsuarioDao;
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/alterarStatusUsuario")
 public class AlterarStatusUsuarioServlet extends HttpServlet {
@@ -17,12 +17,18 @@ public class AlterarStatusUsuarioServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nome = request.getParameter("nome");
-        List<Usuario> users = usuarioDao.getUsersByName(nome);
-        if (users != null && !users.isEmpty()) {
-            Usuario usuario = users.get(0);
-            usuario.setStatus(!usuario.getStatus());
-            usuarioDao.updateUsuario(usuario);
+        String idParam = request.getParameter("id");
+        if (idParam != null && !idParam.isEmpty()) {
+            try {
+                int id = Integer.parseInt(idParam);
+                Usuario usuario = usuarioDao.buscarUsuarioPorId(id);
+                if (usuario != null) {
+                    usuario.setStatus(!usuario.getStatus());
+                    usuarioDao.updateUsuario(usuario);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("ID inválido: " + e.getMessage());
+            }
         }
         response.sendRedirect("lista-usuario");
     }

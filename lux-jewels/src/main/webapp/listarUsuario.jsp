@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
 <head>
     <title>Lista de Usuário</title>
@@ -8,7 +9,6 @@
     <link rel="stylesheet" href="css/ListaUsuario.css">
 </head>
 <body>
-
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid">
         <form class="d-flex" role="search" action="lista-usuario" method="get">
@@ -19,6 +19,7 @@
 </nav>
 
 <c:if test="${not empty users}">
+    <p>Número de usuários encontrados: ${fn:length(users)}</p>
     <table class="table">
         <thead>
         <tr class="table-primary">
@@ -47,6 +48,15 @@
 <c:if test="${empty users}">
     <p>Nenhum usuário encontrado.</p>
 </c:if>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.table').DataTable();
+    });
+</script>
 
 </body>
 </html>
