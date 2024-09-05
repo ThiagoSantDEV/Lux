@@ -5,6 +5,8 @@ import br.com.lux.model.Usuario;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateUsuarioDao {
 
@@ -132,4 +134,84 @@ public class CreateUsuarioDao {
         return usuario;
     }
 
+    public Usuario buscarUsuarioPorId(int id) {
+        String SQL = "SELECT * FROM usuarios WHERE idUsuario = ?";
+        try (Connection connection = ConnectionPoolConfig.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQL)) {
+
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("idUsuario"));
+                    usuario.setNome(rs.getString("nome"));
+                    usuario.setCpf(rs.getString("cpf"));
+                    usuario.setEmail(rs.getString("email"));
+                    usuario.setSenha(rs.getString("senha"));
+                    usuario.setGrupo(rs.getString("grupo"));
+                    usuario.setStatus(rs.getBoolean("ativo"));
+                    return usuario;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar usuário por ID: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public List<Usuario> BuscarUsuarioPorNome(String nome) {
+        List<Usuario> users = new ArrayList<>();
+        String SQL = "SELECT * FROM usuarios WHERE nome LIKE ?";
+        try (Connection connection = ConnectionPoolConfig.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQL)) {
+
+            stmt.setString(1, "%" + nome + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Usuario user = new Usuario();
+                    user.setIdUsuario(rs.getInt("idUsuario"));
+                    user.setNome(rs.getString("nome"));
+                    user.setEmail(rs.getString("email"));
+                    user.setSenha(rs.getString("senha"));
+                    user.setCpf(rs.getString("cpf"));
+                    user.setStatus(rs.getBoolean("ativo"));
+                    user.setGrupo(rs.getString("grupo"));
+                    users.add(user);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar usuários por nome: " + e.getMessage());
+        }
+        return users;
+    }
+
+    public ArrayList<Usuario> listarUsuarios() {
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        String read = "SELECT * FROM Usuario";
+        try {
+            Connection connection = ConnectionPoolConfig.getConnection();
+            PreparedStatement ps = connection.prepareStatement(read);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                int idUsuario = (rs.getInt(1));
+                String nome = (rs.getString(2));
+                String email = (rs.getString(4));
+                String senha = (rs.getString(3));
+                String cpf = (rs.getString(7));
+                Boolean status = (rs.getBoolean(6));
+                String grupo = (rs.getString(5));
+
+                usuarios.add(new Usuario(idUsuario, nome, senha, email, cpf, grupo, status));
+            }
+            connection.close();
+            return usuarios;
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar usuários: " + e.getMessage());
+            return null;
+        }
+
+    }
 }

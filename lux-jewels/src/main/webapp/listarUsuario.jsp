@@ -1,11 +1,5 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: thiag
-  Date: 28/08/2024
-  Time: 15:47
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>Lista de Usuário</title>
@@ -17,34 +11,42 @@
 
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid">
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="d-flex" role="search" action="lista-usuario" method="get">
+            <input class="form-control me-2" type="search" name="nome" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
     </div>
 </nav>
 
-<table class="table">
-    <thead>
-    <tr class="table-primary">
-        <th scope="col">Nome</th>
-        <th scope="col">Email</th>
-        <th scope="col">Status</th>
-        <th scope="col">Grupo</th>
-        <th scope="col">Alterar</th>
-        <th scope="col">Hab/Des</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Thiago</td>
-        <td>thi@gmail.com</td>
-        <td>Ativo</td>
-        <td>Administrador</td>
-        <td>Alterar</td>
-        <td>Inabilitar</td>
-    </tr>
-    </tbody>
-</table>
+<c:if test="${not empty users}">
+    <table class="table">
+        <thead>
+        <tr class="table-primary">
+            <th scope="col">Nome</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col">Grupo</th>
+            <th scope="col">Alterar</th>
+            <th scope="col">Hab/Des</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="user" items="${users}">
+            <tr>
+                <td>${user.nome}</td>
+                <td>${user.email}</td>
+                <td>${user.status ? 'Ativo' : 'Inativo'}</td>
+                <td>${user.grupo}</td>
+                <td><a href="alterarUsuario?id=${user.idUsuario}">Alterar</a></td>
+                <td><a href="alterarStatusUsuario?id=${user.idUsuario}">${user.status ? 'Inabilitar' : 'Habilitar'}</a></td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</c:if>
+<c:if test="${empty users}">
+    <p>Nenhum usuário encontrado.</p>
+</c:if>
+
 </body>
 </html>
