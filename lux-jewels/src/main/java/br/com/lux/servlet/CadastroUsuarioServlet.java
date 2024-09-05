@@ -39,7 +39,8 @@ public class CadastroUsuarioServlet extends HttpServlet {
                 request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
                 return;
             }
-            if (userDao.buscarUsuarioPorCPF(cpf) != null) {
+            else if  (userDao.buscarUsuarioPorCPF(cpf) != null)
+            {
                 request.setAttribute("mensagem", "Esse CPF já está cadastrado!");
                 request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
                 return;
@@ -55,14 +56,18 @@ public class CadastroUsuarioServlet extends HttpServlet {
             usuario.setGrupo(grupo);
             usuario.setStatus(true);
 
-            if (idUsuario == null || idUsuario.isBlank()) {
-                userDao.criarUsuario(usuario);
-                response.sendRedirect("login.jsp");
-            } else {
-                usuario.setIdUsuario(Integer.parseInt(idUsuario));
-                userDao.updateUsuario(usuario);
-                response.sendRedirect("/lista-usuario");
+            if (userDao.buscarUsuarioPorEmail(email) != null) {
+                System.out.println("Email já cadastrado: " + email);
+                request.setAttribute("mensagem", "O email já está cadastrado!");
+                request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
+
+            } else if (userDao.buscarUsuarioPorCPF(cpf) != null) {
+                System.out.println("CPF já cadastrado: " + cpf); //
+                request.setAttribute("mensagem", "Esse CPF já está cadastrado!");
+                request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
+
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();

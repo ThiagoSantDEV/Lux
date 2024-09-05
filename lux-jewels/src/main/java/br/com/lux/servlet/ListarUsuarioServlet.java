@@ -15,9 +15,12 @@ import java.util.List;
 public class ListarUsuarioServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CreateUsuarioDao usuarioDao = new CreateUsuarioDao();
-        List<Usuario> listaUsuarios = usuarioDao.listarUsuarios();
+
+        List<Usuario> listaUsuarios = new  CreateUsuarioDao().listarUsuarios();
         request.setAttribute("users", listaUsuarios);
+
+        System.out.println("Número de usuários enviados para o JSP: " + listaUsuarios.size());
+
         request.getRequestDispatcher("/listarUsuario.jsp").forward(request, response);
     }
 }

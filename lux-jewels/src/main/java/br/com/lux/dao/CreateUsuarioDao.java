@@ -36,9 +36,11 @@ public class CreateUsuarioDao {
             }
         } catch (SQLException e) {
             System.out.println("Erro ao criar o usuário: " + e.getMessage());
+            e.printStackTrace(); // Adiciona o stack trace para depuração
         }
         return usuario;
     }
+
 
     public Usuario buscarUsuarioPorEmail(String email) {
         String SQL = "SELECT * FROM usuarios WHERE email = ?";
@@ -49,7 +51,7 @@ public class CreateUsuarioDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("idUsuario")); // Corrigido para idUsuario
+                    usuario.setIdUsuario(rs.getInt("idUsuario"));
                     usuario.setNome(rs.getString("nome"));
                     usuario.setCpf(rs.getString("cpf"));
                     usuario.setEmail(rs.getString("email"));
@@ -69,12 +71,11 @@ public class CreateUsuarioDao {
         String SQL = "SELECT * FROM usuarios WHERE cpf = ?";
         try (Connection connection = ConnectionPoolConfig.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQL)) {
-
             stmt.setString(1, cpf);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("idUsuario")); // Corrigido para idUsuario
+                    usuario.setIdUsuario(rs.getInt("id"));
                     usuario.setNome(rs.getString("nome"));
                     usuario.setCpf(rs.getString("cpf"));
                     usuario.setEmail(rs.getString("email"));
@@ -117,7 +118,7 @@ public class CreateUsuarioDao {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Usuario user = new Usuario();
-                user.setIdUsuario(rs.getInt("id"));
+                user.setIdUsuario(rs.getInt("idUsuario")); // Corrigido para idUsuario
                 user.setNome(rs.getString("nome"));
                 user.setEmail(rs.getString("email"));
                 user.setSenha(rs.getString("senha"));
@@ -125,20 +126,12 @@ public class CreateUsuarioDao {
                 user.setStatus(rs.getBoolean("ativo"));
                 user.setGrupo(rs.getString("grupo"));
                 usuarios.add(user);
-
             }
-
-            System.out.println("Usuarios listados: "+ listarUsuarios() );
-
         } catch (Exception e) {
-            System.out.println("fail in database connection");
-            return Collections.emptyList();
+            System.out.println("Erro ao listar usuários: " + e.getMessage());
         }
         return usuarios;
     }
-
-
-
 
     public Usuario updateUsuario(Usuario usuario) {
         String SQL = "UPDATE usuarios SET nome = ?, email = ?, senha = ?, cpf = ?, ativo = ?, grupo = ? WHERE idUsuario = ?";
