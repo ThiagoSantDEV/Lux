@@ -26,7 +26,7 @@ public class CadastroUsuarioServlet extends HttpServlet {
         String confirmaSenha = request.getParameter("confirmaSenha");
         String grupo = request.getParameter("grupo");
 
-        // Verifica se as senhas são iguais
+
         if (!senha.equals(confirmaSenha)) {
             request.setAttribute("mensagem", "As senhas não coincidem!");
             request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
@@ -36,7 +36,6 @@ public class CadastroUsuarioServlet extends HttpServlet {
         try {
             CreateUsuarioDao userDao = new CreateUsuarioDao();
 
-            // Verifica se o email ou o CPF já estão cadastrados
             if (userDao.buscarUsuarioPorEmail(email) != null) {
                 request.setAttribute("mensagem", "O email já está cadastrado!");
                 request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
@@ -47,10 +46,10 @@ public class CadastroUsuarioServlet extends HttpServlet {
                 return;
             }
 
-            // Encripta a senha
+
             String senhaEncriptada = BCrypt.hashpw(senha, BCrypt.gensalt());
 
-            // Cria ou atualiza o usuário
+
             Usuario usuario = new Usuario();
             usuario.setNome(nome);
             usuario.setCpf(cpf);
@@ -73,7 +72,7 @@ public class CadastroUsuarioServlet extends HttpServlet {
             request.setAttribute("mensagem", "Ocorreu um erro ao cadastrar o usuário.");
             request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
         }
-
+        response.sendRedirect("/lista-usuario");
 
     }
 }

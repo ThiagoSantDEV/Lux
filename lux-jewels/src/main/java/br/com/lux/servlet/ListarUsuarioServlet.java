@@ -21,7 +21,7 @@ public class ListarUsuarioServlet extends HttpServlet {
 
         System.out.println("Número de usuários enviados para o JSP: " + listaUsuarios.size());
 
-        request.getRequestDispatcher("/listarUsuario.jsp").forward(request, response);
+        request.getRequestDispatcher("listarUsuario.jsp").forward(request, response);
     }
 }
 

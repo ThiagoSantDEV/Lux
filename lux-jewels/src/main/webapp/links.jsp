@@ -20,7 +20,7 @@
 <div class="container">
     <h1>Links</h1>
     <a href="listarProduto.jsp">Listar Produto</a>
-    <a href="listarUsuario.jsp">Listar Usuário</a>
+    <a href="lista-usuario">Listar Usuário</a> <%-- REVISAR --%>
     <a href="listarPedidos.jsp">Listar Pedidos</a>
 </div>
 </form>

@@ -18,8 +18,8 @@ public class ConnectionPoolConfig {
             dataSource.setUrl("jdbc:h2:~/test");
             dataSource.setUsername("sa");
             dataSource.setPassword("sa");
-            dataSource.setMinIdle(5);   // Número mínimo de conexões ociosas no pool
-            dataSource.setMaxIdle(10);  // Número máximo de conexões ociosas no pool
+            dataSource.setMinIdle(10);   // Número mínimo de conexões ociosas no pool
+            dataSource.setMaxIdle(20);  // Número máximo de conexões ociosas no pool
             dataSource.setMaxTotal(50); // Número máximo de conexões totais no pool
 
             System.out.println("New connection pool created successfully");

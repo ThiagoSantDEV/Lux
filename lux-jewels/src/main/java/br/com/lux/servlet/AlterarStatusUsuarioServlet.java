@@ -30,6 +30,6 @@ public class AlterarStatusUsuarioServlet extends HttpServlet {
                 System.out.println("ID inválido: " + e.getMessage());
             }
         }
-        response.sendRedirect("lista-usuario");
+        response.sendRedirect("/lista-usuario");
     }
 }

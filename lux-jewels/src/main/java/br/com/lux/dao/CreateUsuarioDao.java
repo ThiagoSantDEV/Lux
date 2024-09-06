@@ -41,6 +41,19 @@ public class CreateUsuarioDao {
         return usuario;
     }
 
+    public void inicializarAdmin() {
+        if (buscarUsuarioPorEmail("admin@gmail.com") == null) {
+            Usuario admin = new Usuario();
+            admin.setNome("admin");
+            admin.setCpf("49916687862");
+            admin.setEmail("admin@gmail.com");
+            admin.setSenha(BCrypt.hashpw("admin", BCrypt.gensalt()));
+            admin.setGrupo("admin");
+            admin.setStatus(true);
+            criarUsuario(admin);
+        }
+    }
+
 
     public Usuario buscarUsuarioPorEmail(String email) {
         String SQL = "SELECT * FROM usuarios WHERE email = ?";
