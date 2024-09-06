@@ -33,9 +33,9 @@
 
             <button type="submit">Login</button>
 
-            <div>Ainda não tem cadastro? <a href="cadastrarUsuario.jsp" class="cadastro">Crie sua conta</a></div>
+           <%-- <div>Ainda não tem cadastro? <a href="cadastrarUsuario.jsp" class="cadastro">Crie sua conta</a></div> --%>
 
-        <div>
+        </div>
 
     </form>
 

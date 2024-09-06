@@ -18,7 +18,7 @@ public class Usuario {
         super();
     }
 
-    public Usuario(int idUsuario, String username, String senha, String email, String cpf, String grupo, boolean status) {
+    public Usuario(int idUsuario, String username, String senha, String cpf, String email, String grupo, boolean status) {
         this.idUsuario = idUsuario;
         this.nome = username;
         this.senha = senha;

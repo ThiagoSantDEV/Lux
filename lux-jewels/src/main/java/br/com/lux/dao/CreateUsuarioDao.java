@@ -97,6 +97,7 @@ public class CreateUsuarioDao {
              PreparedStatement stmt = connection.prepareStatement(SQL)) {
 
             stmt.setString(1, usuario.getEmail());
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     String passwordHash = rs.getString("senha");
@@ -111,27 +112,32 @@ public class CreateUsuarioDao {
         return false;
     }
     public List<Usuario> listarUsuarios() {
-        String SQL = "SELECT * FROM usuarios";
         List<Usuario> usuarios = new ArrayList<>();
+        String SQL = "SELECT * FROM usuarios";
+
         try (Connection connection = ConnectionPoolConfig.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQL);
              ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                Usuario user = new Usuario();
-                user.setIdUsuario(rs.getInt("idUsuario")); // Corrigido para idUsuario
-                user.setNome(rs.getString("nome"));
-                user.setEmail(rs.getString("email"));
-                user.setSenha(rs.getString("senha"));
-                user.setCpf(rs.getString("cpf"));
-                user.setStatus(rs.getBoolean("ativo"));
-                user.setGrupo(rs.getString("grupo"));
-                usuarios.add(user);
+                int idUsuario = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String email = rs.getString("email");
+                String cpf = rs.getString("cpf");
+                String senha = rs.getString("senha");
+                String grupo = rs.getString("grupo");
+                boolean status = rs.getBoolean("ativo");
+
+                Usuario usuario = new Usuario(idUsuario, nome, email, senha, cpf, grupo, status);
+                usuarios.add(usuario);
             }
+
         } catch (Exception e) {
             System.out.println("Erro ao listar usuários: " + e.getMessage());
         }
         return usuarios;
     }
+
 
     public Usuario updateUsuario(Usuario usuario) {
         String SQL = "UPDATE usuarios SET nome = ?, email = ?, senha = ?, cpf = ?, ativo = ?, grupo = ? WHERE idUsuario = ?";
