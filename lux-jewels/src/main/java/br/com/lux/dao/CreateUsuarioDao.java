@@ -64,7 +64,7 @@ public class CreateUsuarioDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("idUsuario"));
+                    usuario.setIdUsuario(rs.getInt("id"));
                     usuario.setNome(rs.getString("nome"));
                     usuario.setCpf(rs.getString("cpf"));
                     usuario.setEmail(rs.getString("email"));
@@ -178,7 +178,7 @@ public class CreateUsuarioDao {
     }
 
     public Usuario buscarUsuarioPorId(int id) {
-        String SQL = "SELECT * FROM usuarios WHERE idUsuario = ?";
+        String SQL = "SELECT * FROM usuarios WHERE id = ?";
         try (Connection connection = ConnectionPoolConfig.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQL)) {
 
@@ -186,7 +186,7 @@ public class CreateUsuarioDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Usuario usuario = new Usuario();
-                    usuario.setIdUsuario(rs.getInt("idUsuario")); // Correto
+                    usuario.setIdUsuario(rs.getInt("id")); // Correto
                     usuario.setNome(rs.getString("nome"));
                     usuario.setCpf(rs.getString("cpf"));
                     usuario.setEmail(rs.getString("email"));
