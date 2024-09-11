@@ -135,13 +135,13 @@ public class CreateUsuarioDao {
             while (rs.next()) {
                 int idUsuario = rs.getInt("id");
                 String nome = rs.getString("nome");
-                String email = rs.getString("email");
                 String cpf = rs.getString("cpf");
+                String email = rs.getString("email");
                 String senha = rs.getString("senha");
                 String grupo = rs.getString("grupo");
                 boolean status = rs.getBoolean("ativo");
 
-                Usuario usuario = new Usuario(idUsuario, nome, email, senha, cpf, grupo, status);
+                Usuario usuario = new Usuario(idUsuario, nome, senha, cpf, email, grupo, status);
                 usuarios.add(usuario);
             }
 
@@ -153,17 +153,17 @@ public class CreateUsuarioDao {
 
 
     public Usuario updateUsuario(Usuario usuario) {
-        String SQL = "UPDATE usuarios SET nome = ?, email = ?, senha = ?, cpf = ?, ativo = ?, grupo = ? WHERE idUsuario = ?";
+        // Query modificada para não alterar email e CPF
+        String SQL = "UPDATE usuarios SET nome = ?, cpf = ?, senha = ?, grupo = ?, ativo = ? WHERE id = ?";
         try (Connection connection = ConnectionPoolConfig.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQL)) {
 
             stmt.setString(1, usuario.getNome());
-            stmt.setString(2, usuario.getEmail());
+            stmt.setString(2, usuario.getCpf());
             stmt.setString(3, usuario.getSenha());
-            stmt.setString(4, usuario.getCpf());
+            stmt.setString(4, usuario.getGrupo());
             stmt.setBoolean(5, usuario.getStatus());
-            stmt.setString(6, usuario.getGrupo());
-            stmt.setInt(7, usuario.getIdUsuario());
+            stmt.setInt(6, usuario.getIdUsuario());
 
             int linhasAfetadas = stmt.executeUpdate();
             if (linhasAfetadas > 0) {
@@ -214,9 +214,9 @@ public class CreateUsuarioDao {
                     Usuario user = new Usuario();
                     user.setIdUsuario(rs.getInt("idUsuario")); // Corrigido para idUsuario
                     user.setNome(rs.getString("nome"));
+                    user.setCpf(rs.getString("cpf"));
                     user.setEmail(rs.getString("email"));
                     user.setSenha(rs.getString("senha"));
-                    user.setCpf(rs.getString("cpf"));
                     user.setStatus(rs.getBoolean("ativo"));
                     user.setGrupo(rs.getString("grupo"));
                     users.add(user);
@@ -227,8 +227,5 @@ public class CreateUsuarioDao {
         }
         return users;
     }
-
-
-
 
 }

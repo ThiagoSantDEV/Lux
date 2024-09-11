@@ -18,14 +18,13 @@ public class CadastroUsuarioServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String idUsuario = request.getParameter("id");
+        String idUsuario = request.getParameter("idUsuario");
         String nome = request.getParameter("nome");
         String cpf = request.getParameter("cpf").replaceAll("[^\\d]", "");
         String email = request.getParameter("email");
         String senha = request.getParameter("senha");
         String confirmaSenha = request.getParameter("confirmaSenha");
         String grupo = request.getParameter("grupo");
-
 
         if (!senha.equals(confirmaSenha)) {
             request.setAttribute("mensagem", "As senhas não coincidem!");
@@ -36,19 +35,17 @@ public class CadastroUsuarioServlet extends HttpServlet {
         try {
             CreateUsuarioDao userDao = new CreateUsuarioDao();
 
-            if (userDao.buscarUsuarioPorEmail(email) != null) {
+            if (userDao.buscarUsuarioPorEmail(email) != null && (idUsuario == null || idUsuario.isBlank())) {
                 request.setAttribute("mensagem", "O email já está cadastrado!");
                 request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
                 return;
-            } else if (userDao.buscarUsuarioPorCPF(cpf) != null) {
+            } else if (userDao.buscarUsuarioPorCPF(cpf) != null && (idUsuario == null || idUsuario.isBlank())) {
                 request.setAttribute("mensagem", "Esse CPF já está cadastrado!");
                 request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
                 return;
             }
 
-
             String senhaEncriptada = BCrypt.hashpw(senha, BCrypt.gensalt());
-
 
             Usuario usuario = new Usuario();
             usuario.setNome(nome);
@@ -63,16 +60,13 @@ public class CadastroUsuarioServlet extends HttpServlet {
             } else {
                 usuario.setIdUsuario(Integer.parseInt(idUsuario));
                 userDao.updateUsuario(usuario);
-                response.sendRedirect("/lista-usuario");
             }
-
+            response.sendRedirect("/lista-usuario");
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("mensagem", "Ocorreu um erro ao cadastrar o usuário.");
             request.getRequestDispatcher("cadastrarUsuario.jsp").forward(request, response);
         }
-        response.sendRedirect("/lista-usuario");
-
     }
 }
